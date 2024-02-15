@@ -1,0 +1,17 @@
+body{
+    background-color: #252630;
+}
+
+#footer-component{
+    background-color: #252630;
+}
+
+.footer-comp{
+    display: flex;
+    justify-content: center;
+    width: 100vw;
+}
+
+body{
+    overflow-x: hidden;
+}

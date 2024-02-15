@@ -1,0 +1,6 @@
+.speech-buttons{
+    display:flex;
+    flex-direction: row;
+    width: 20vw;
+}
+
