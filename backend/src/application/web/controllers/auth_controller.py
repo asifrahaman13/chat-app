@@ -34,23 +34,15 @@ async def signup(user: UserBase, user_interface: UserInterface = Depends(user_se
     memberpass = user_data["memberpass"]
 
     try:
-        # Check if the user already exists
-        if user_interface.check_user(membername, memberpass):
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="User already exists"
-            )
 
         # Create the new user
-        user_interface.create_user(membername, memberpass)
-        
+        data = user_interface.save_user(membername, memberpass)
+        print("************************", data)
+
         # Generate an access token for the new user
         access_token_expires = timedelta(days=7)
         access_token = auth_interface.create_access_token(data={"sub": membername}, expires_delta=access_token_expires)
 
-        # Inform about successful signup
-        data = user_interface.inform_signup(membername)
-        
         return {"access_token": access_token, "token_type": "bearer", "data": data}
     except Exception as e:
         raise HTTPException(
@@ -58,6 +50,7 @@ async def signup(user: UserBase, user_interface: UserInterface = Depends(user_se
             detail="Failed to signup user",
             headers={"WWW-Authenticate": "Bearer"},
         )
+
 
 @router.post("/login")
 async def all_data(
@@ -71,9 +64,9 @@ async def all_data(
 
     print(user_data)
 
-    is_authenticated=user_interface.check_user(membername, memberpass)
-    if(is_authenticated==False):
-        return 
+    is_authenticated = user_interface.check_user(membername, memberpass)
+    if is_authenticated == False:
+        return
 
     try:
         # Generate an access token
@@ -90,7 +83,6 @@ async def all_data(
         )
 
 
-
 @router.get("/authenticate")
 async def get_protected_data(current_user: str = Depends(get_current_user), auth_interface: AuthInterface = Depends(auth_service)):
     user = auth_interface.get_current_user(current_user)
@@ -98,4 +90,3 @@ async def get_protected_data(current_user: str = Depends(get_current_user), auth
     if user == False:
         return HttePrequestErrors.unauthorized()
     return {"message": True, "user": user}
-

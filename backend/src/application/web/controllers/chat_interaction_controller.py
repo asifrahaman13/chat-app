@@ -66,16 +66,15 @@ async def get_sessions(
 
     try:
         user = auth_interface.get_current_user(current_user)
-        get_sessions=user_interface.get_user_data(question.session_id)
+        get_sessions = user_interface.get_user_data(question.session_id)
         return get_sessions
 
     except Exception as e:
         print(e)
 
 
-@router.post("/sessions")
+@router.get("/sessions")
 async def get_sessions(
-    question: Question,
     current_user: str = Depends(get_current_user),
     chat_interface: ChatInterface = Depends(chat_service),
     user_interface: UserInterface = Depends(user_service),
@@ -84,7 +83,7 @@ async def get_sessions(
 
     try:
         user = auth_interface.get_current_user(current_user)
-        get_sessions=user_interface.get_all_sessions(user)
+        get_sessions = user_interface.get_all_sessions(user)
         return get_sessions
 
     except Exception as e:

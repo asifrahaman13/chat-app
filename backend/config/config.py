@@ -7,11 +7,7 @@ import os
 load_dotenv()
 
 SECRET_KEY=os.getenv('SECRET_KEY')
-HOST=os.getenv('HOST')
-DBNAME=os.getenv('DBNAME')
-USER=os.getenv('USER', "vaadminevva")
-PASSWORD=os.getenv('PASSWORD')
-CONNECTION_STRING=os.getenv('CONNECTION_STRING')
 
+SQL_DB_URL=os.getenv('SQL_DB_URL')
 
 OPENAI_API_KEY=os.getenv('OPENAI_API_KEY')

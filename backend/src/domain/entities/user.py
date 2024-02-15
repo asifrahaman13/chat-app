@@ -4,6 +4,7 @@ from sqlmodel import SQLModel, Field, JSON
 from typing import List, Optional
 from pydantic import BaseModel
 
+
 class User(BaseModel):
     user_id: str | None = None
     username: str | None = None
@@ -13,6 +14,7 @@ class Vadata(SQLModel, table=True):
     __tablename__ = "vadata"
     membername: str | None = Field(primary_key=True)
     memberpass: str | None = None
+
 
 class UserBase(BaseModel):
     membername: str | None = None
@@ -34,7 +36,6 @@ class Question(BaseModel):
     session_id: str | None = None
 
 
-
 class UserSessionData(SQLModel, table=True):
     __tablename__ = "user_session_data"
     id: Optional[int] = Field(default=None, primary_key=True)
@@ -47,4 +48,3 @@ class UserSession(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     user_id: str | None = None
     session_id: str | None = None
-    

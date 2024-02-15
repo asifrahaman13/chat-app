@@ -16,5 +16,3 @@ class AuthInterface(ABC):
         self,
     ):
         pass
-
-    
