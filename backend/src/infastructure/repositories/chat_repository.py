@@ -17,6 +17,6 @@ class ChatRepository:
         self.conversation = ConversationChain(llm=self.llm, verbose=True, memory=ConversationBufferMemory())
 
     def chat_response(self, question):
-        # response = self.conversation.predict(input=question)
-        response = "In this implementation, the UserSessionData and UserData classes are defined as SQLModel classes with appropriate relationships. The save_data method uses a SQLModel Session to interact with the database. It checks if a user with the given user_id exists. If the user exists, it appends a new UserSessionData instance to the sessions list. If the user does not exist, it creates a new UserData instance with the UserSessionData instance in the sessions list and adds it to the session for insertion into the database. Finally, it commits the changes to the database."
+        response = self.conversation.predict(input=question)
+
         return response
