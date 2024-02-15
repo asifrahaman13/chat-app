@@ -33,11 +33,16 @@ async def signup(user: UserBase, user_interface: UserInterface = Depends(user_se
     membername = user_data["membername"]
     memberpass = user_data["memberpass"]
 
+    if membername == "" or memberpass == "":
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Plesae provide valid credential",
+        )
+
     try:
 
         # Create the new user
         data = user_interface.save_user(membername, memberpass)
-        print("************************", data)
 
         # Generate an access token for the new user
         access_token_expires = timedelta(days=7)
@@ -63,6 +68,12 @@ async def all_data(
     memberpass = user_data["memberpass"]
 
     print(user_data)
+
+    if membername == "" or memberpass == "":
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Plesae provide valid credential",
+        )
 
     is_authenticated = user_interface.check_user(membername, memberpass)
     if is_authenticated == False:

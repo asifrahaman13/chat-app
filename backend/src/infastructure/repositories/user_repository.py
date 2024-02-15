@@ -7,6 +7,7 @@ from sqlmodel import SQLModel
 from src.domain.entities.user import Vadata
 from config.config import SQL_DB_URL
 
+
 class UserRepository:
 
     def __init__(self):

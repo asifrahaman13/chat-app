@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 export default function Home() {
   const [loggedIn, setLoggedIn] = useState(false);
   useEffect(() => {
-    const accessToken = localStorage.getItem("access_token");
+    const accessToken = localStorage.getItem("access_token") || "";
     async function checkLoggedIn() {
       const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/authenticate`, {
         headers: {
@@ -22,7 +22,11 @@ export default function Home() {
         }
       }
     }
-    checkLoggedIn();
+
+    if(accessToken){
+
+      checkLoggedIn();
+    }
   }, []);
 
   return <>{loggedIn == false ? <Login /> : <Chat />}</>;

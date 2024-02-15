@@ -3,7 +3,8 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { Interactions, Session, SessionStorage, CurrentSessionButtonProps, SessionButtonProps } from "../Types/Chat_types";
+import { Interactions, Session, CurrentSessionButtonProps, SessionButtonProps } from "../Types/Chat_types";
+import { ReactTyped } from "react-typed";
 
 const CurrentSessionButton: React.FC<CurrentSessionButtonProps> = ({ onClick }) => (
   <button className="flex items-center bg-gray-700 m-3 h-24 rounded-md p-4" onClick={onClick}>
@@ -31,6 +32,7 @@ const Chat = () => {
       session_id: "",
     },
   ]);
+  const [responseState, setResponseState] = useState("Click Here");
 
   useEffect(() => {
     const randomString = uuidv4();
@@ -51,6 +53,7 @@ const Chat = () => {
   }, []);
 
   async function getAnswer() {
+    setResponseState("Generating");
     const accessToken = localStorage.getItem("access_token");
     try {
       const response = await axios.post(
@@ -74,6 +77,11 @@ const Chat = () => {
     } catch (error) {
       console.log(error);
     }
+    setResponseState("Done");
+
+    setTimeout(() => {
+      setResponseState("Click Here");
+    }, 3000);
   }
 
   const [prevSession, setPrevSession] = useState(false);
@@ -101,6 +109,17 @@ const Chat = () => {
       console.log(error);
     }
   }
+
+  // Function to format text with bold and italic tags
+  const formatText = (text: string) => {
+    // Replace **text** with <b> tags for bold text
+    text = text.replace(/\*\*(.*?)\*\*/g, "<b>$1</b>");
+
+    // Replace _text_ with <i> tags for italic text
+    text = text.replace(/_(.*?)_/g, "<i>$1</i>");
+
+    return text;
+  };
 
   return (
     <>
@@ -155,7 +174,17 @@ const Chat = () => {
                       <div className="flex w-full ">
                         <img src="/bot.png" alt="" className="h-12" />
 
-                        <div className="w-3/5  mr-auto rounded-md bg-chat-gpt p-2 text-white text-justify">{item.answer}</div>
+                        <div className="w-3/5  mr-auto rounded-md bg-chat-gpt p-2 text-white text-justify">
+                          <ReactTyped strings={[formatText(item.answer)]} typeSpeed={10}>
+                            <p
+                              className="leading-relaxed text-base text-white"
+                              style={{ whiteSpace: "pre-line" }}
+                              dangerouslySetInnerHTML={{
+                                __html: formatText(item.answer),
+                              }}
+                            ></p>
+                          </ReactTyped>
+                        </div>
                       </div>
                     </>
                   ))}
@@ -174,9 +203,9 @@ const Chat = () => {
                   onClick={(e) => {
                     getAnswer();
                   }}
-                  className="bg-black w-5/6 rounded-xl p-4 text-white"
+                  className={`${responseState === "Generating" ? "bg-gray-500" : ""} bg-black w-5/6 rounded-xl p-4 text-white`}
                 >
-                  click here
+                  {responseState}
                 </button>
               </div>
             </div>
